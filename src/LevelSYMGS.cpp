@@ -107,7 +107,7 @@ assert(x.localLength == A.localNumberOfColumns); // Make sure x contains space f
   Optivector * x_Optimized = (Optivector *) x.optimizationData;
   double_1d_type x_values = x_Optimized->values;
 
-  double_1d_type z("z", x_values.dimension_0());
+  double_1d_type z("z", x_values.extent(0));
 #ifdef KOKKOS_TEAM
   const int row_per_team=256;
   const int vector_size = 32;
@@ -129,7 +129,7 @@ assert(x.localLength == A.localNumberOfColumns); // Make sure x contains space f
     execution_space::fence();
   }
 
-  
+
 #else
   for(int i = 0; i < f_numLevels; i++){
     int start = f_lev_map(i);

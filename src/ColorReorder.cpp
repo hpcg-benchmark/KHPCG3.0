@@ -85,13 +85,13 @@ int ColorReorder(SparseMatrix & A, Vector & x, Vector & b){
 	Kokkos::deep_copy(host_b_values, b_values);
 	//WHOO!!!! BABY STEPS!
 	std::cout<<"REORDERING..." << std::endl;
-	values_type newValues("New Values on Device", localMatrix.values.dimension_0());
-	local_index_type newIndices("New entries on Device", localMatrix.graph.entries.dimension_0());
-	non_const_row_map_type newRowMap("New RowMap on Device", localMatrix.graph.row_map.dimension_0());
+	values_type newValues("New Values on Device", localMatrix.values.extent(0));
+	local_index_type newIndices("New entries on Device", localMatrix.graph.entries.extent(0));
+	non_const_row_map_type newRowMap("New RowMap on Device", localMatrix.graph.row_map.extent(0));
 	host_non_const_row_map_type host_newRowMap = Kokkos::create_mirror_view(newRowMap); // ASSUME THIS SETS IT TO ALL 0's
-	double_1d_type newX("New X_values on Device", x_values.dimension_0());
+	double_1d_type newX("New X_values on Device", x_values.extent(0));
 	host_double_1d_type host_newX = Kokkos::create_mirror_view(newX);
-	double_1d_type newB("New B values on Device", b_values.dimension_0());
+	double_1d_type newB("New B values on Device", b_values.extent(0));
 	host_double_1d_type host_newB = Kokkos::create_mirror_view(newB);
 	local_int_1d_type orig_rows = local_int_1d_type("Original row indices", A.localNumberOfRows);
 	host_local_int_1d_type host_orig_rows = Kokkos::create_mirror_view(orig_rows);
@@ -137,10 +137,10 @@ int ColorReorder(SparseMatrix & A, Vector & x, Vector & b){
 	Kokkos::deep_copy(newB, host_newB);
 	//This will permute the columns to help us maintain symmetry.
 	/*
-	for(int i = 0; i < newIndices.dimension_0(); i++)
+	for(int i = 0; i < newIndices.extent(0); i++)
 		newIndices(i) = host_row_dest(newIndices(i));
 	*/
-	Kokkos::parallel_for(newIndices.dimension_0(), PermuteColumn(row_dest, newIndices));
+	Kokkos::parallel_for(newIndices.extent(0), PermuteColumn(row_dest, newIndices));
 	local_int_1d_type new_diag("New Diagonal", A.localNumberOfRows);
 	/*
 	for(int i = 0; i < A.localNumberOfRows; i++){

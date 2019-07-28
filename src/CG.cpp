@@ -147,12 +147,12 @@ int CG(const SparseMatrix & A, CGData & data, const Vector & b, Vector & x,
   local_int_1d_type orig_rows = A_Optimized-> orig_rows;
   Optivector * x_Optimized = (Optivector *) x.optimizationData;
   double_1d_type x_values = x_Optimized->values;
-  double_1d_type x_copy = double_1d_type("", x_values.dimension_0());
+  double_1d_type x_copy = double_1d_type("", x_values.extent(0));
   /*
-  for(int i = 0; i < x_values.dimension_0(); i++)
+  for(int i = 0; i < x_values.extent(0); i++)
     x_copy(orig_rows(i)) = x_values(i);
   */
-  Kokkos::parallel_for(x_values.dimension_0(), PermuteX(orig_rows, x_copy, x_values));
+  Kokkos::parallel_for(x_values.extent(0), PermuteX(orig_rows, x_copy, x_values));
   //for(int i = 0; i < 10; i++)
   //  std::cout<<"Px("<<i<<") = "<<x_values(i)<< "    x("<<i<<") = "<<x_copy(i)<<std::endl;
   x_values = x_copy;
