@@ -62,8 +62,8 @@ typedef const_global_int_2d_type::HostMirror host_const_global_int_2d_type;
 typedef const_char_1d_type::HostMirror host_const_char_1d_type;
 //CrsMatrix typedefs
 //CrsMatrix types
-typedef Kokkos::CrsMatrix<double, local_int_t, execution_space> local_matrix_type;
-typedef Kokkos::CrsMatrix<double, global_int_t, execution_space> global_matrix_type;
+typedef KokkosSparse::CrsMatrix<double, local_int_t, execution_space> local_matrix_type;
+typedef KokkosSparse::CrsMatrix<double, global_int_t, execution_space> global_matrix_type;
 typedef local_matrix_type::values_type values_type; // View for matrix values, similar to double_1d_type.
 typedef local_matrix_type::index_type local_index_type; // View for column Indices, similar to local_int_1d_type.
 typedef global_matrix_type::index_type global_index_type;
