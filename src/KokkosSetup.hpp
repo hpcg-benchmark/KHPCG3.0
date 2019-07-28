@@ -7,7 +7,7 @@ This file is for the intention of creating things needed by Kokkos.
 #ifndef KOKKOS_SETUP
 #define KOKKOS_SETUP
 
-#include <KokkosCore_config.h>
+#include <Kokkos_Macros.hpp>
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Sparse.hpp>
