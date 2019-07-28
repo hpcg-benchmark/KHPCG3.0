@@ -118,7 +118,7 @@ assert(x.localLength == A.localNumberOfColumns); // Make sure x contains space f
     int numberOfTeams = level_index_end - level_index_begin;
     Kokkos::parallel_for(team_policy(numberOfTeams/teamSizeMax + 1, teamSizeMax, vector_size),
       LeveledSweep(level_index_begin, level_index_end, localMatrix, f_lev_ind, r_values, x_values));
-    execution_space::fence();
+    execution_space().fence();
   }
   for(int i = 0; i < b_numLevels; i++){
     int level_index_begin = b_lev_map(i);
@@ -126,7 +126,7 @@ assert(x.localLength == A.localNumberOfColumns); // Make sure x contains space f
     int numberOfTeams = level_index_end - level_index_begin;
     Kokkos::parallel_for(team_policy(numberOfTeams/teamSizeMax + 1, teamSizeMax, vector_size),
       LeveledSweep(level_index_begin, level_index_end, localMatrix, b_lev_ind, r_values, x_values));
-    execution_space::fence();
+    execution_space().fence();
   }
 
 
