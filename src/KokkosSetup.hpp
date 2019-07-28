@@ -10,7 +10,7 @@ This file is for the intention of creating things needed by Kokkos.
 #include <Kokkos_Macros.hpp>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Sparse.hpp>
+#include <KokkosSparse.hpp>
 #include "Kokkos_UnorderedMap.hpp"
 #include "Geometry.hpp" // Just so we have the local_int_t and global_int_t definitions.
 
