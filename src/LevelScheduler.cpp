@@ -14,7 +14,7 @@ class fillColorsMap{
 	void operator()(const int & i)const{
 		int color = i+1;
 		int total = 0;
-		for(unsigned j = 0; j < colors.dimension_0(); j++)
+		for(unsigned j = 0; j < colors.extent(0); j++)
 			if(colors(j) == color) total++;
 		colors_map(color) = total;
 	}
@@ -50,7 +50,7 @@ class fillColorsInd{
 	void operator()(const int & i)const{
 		int color = i+1; // Colors start at 1 and i starts at 0.
 		int start = colors_map(i);
-		for(unsigned j = 0; j < colors.dimension_0(); j++){
+		for(unsigned j = 0; j < colors.extent(0); j++){
 			if(colors(j) == color){
 				colors_ind(start) = j;
 				start++;

@@ -16,7 +16,7 @@ class Coloring{
   array_type _vertexList;
   array_type _recolorList;
   ordinal_type _vertexListLength;  // 0-dim Kokkos::View, so really Ordinal
-  ordinal_type _recolorListLength; // 0-dim Kokkos::View, so really Ordinal	
+  ordinal_type _recolorListLength; // 0-dim Kokkos::View, so really Ordinal
 
   ordinal_type::HostMirror host_vertexListLength;
   ordinal_type::HostMirror host_recolorListLength;
@@ -143,7 +143,7 @@ class Coloring{
 	// This method is in serial so it will need a bit of reworking to be used on Cuda.
 		// Compute maxColor.
 		const int maxColor = 255; // Guess, since too expensive to loop over nvtx
-		
+
 		int forbidden[maxColor+1];
 		Ordinal i = 0;
 		for(Ordinal k = 0; k < _size; k++){
@@ -158,7 +158,7 @@ class Coloring{
 			}
 
 			// recolor vertex i with smallest available color
-			
+
 			// check neighbors
 			for(Ordinal j = _idx[i]; j < _idx[i+1]; j++){
 				if(_adj[j] == i) continue; // Skip self-loops
@@ -223,7 +223,7 @@ class fillColorsMap{
 	void operator()(const int & i)const{
 		int color = i+1; // Since i starts at 0 and colors start at 1.
 		int total = 0;
-		for(int j = 0; j < colors.dimension_0(); j++)
+		for(int j = 0; j < colors.extent(0); j++)
 			if(colors(j) == color) total++;
 		colors_map(color) = total;
 	}
@@ -259,7 +259,7 @@ class fillColorsInd{
 	void operator()(const int & i)const{
 		int color = i+1; // Colors start at 1 and i starts at 0.
 		int start = colors_map(i);
-		for(int j = 0; j < colors.dimension_0(); j++){
+		for(int j = 0; j < colors.extent(0); j++){
 			if(colors(j) == color){
 				colors_ind(start) = j;
 				start++;
@@ -274,10 +274,10 @@ int doColoring(SparseMatrix & A){
 	Optimatrix * A_Optimized = (Optimatrix*) A.optimizationData;
 	local_matrix_type localMatrix = A_Optimized->localMatrix;
 	Coloring::array_type colors("colors", A.localNumberOfRows);
-	Coloring::array_type idx("idx", localMatrix.graph.row_map.dimension_0()); // Should be A.localNumberOfRows+1 length
-	Coloring::array_type adj("adj", localMatrix.graph.entries.dimension_0()); // Should be A.LocalNumberOfNonzeros.
-	Kokkos::parallel_for(localMatrix.graph.row_map.dimension_0(), fillIdx(idx, localMatrix.graph.row_map));
-	Kokkos::parallel_for(localMatrix.graph.entries.dimension_0(), fillAdj(adj, localMatrix.graph.entries));
+	Coloring::array_type idx("idx", localMatrix.graph.row_map.extent(0)); // Should be A.localNumberOfRows+1 length
+	Coloring::array_type adj("adj", localMatrix.graph.entries.extent(0)); // Should be A.LocalNumberOfNonzeros.
+	Kokkos::parallel_for(localMatrix.graph.row_map.extent(0), fillIdx(idx, localMatrix.graph.row_map));
+	Kokkos::parallel_for(localMatrix.graph.entries.extent(0), fillAdj(adj, localMatrix.graph.entries));
 	Coloring c(A.localNumberOfRows, idx, adj, colors);
 	c.color(false, false, false); // Flags are as follows... Use conflict List, Serial Resolve Conflict, Time and show.
 	int numColors = c.getNumColors();

@@ -7,10 +7,10 @@ This file is for the intention of creating things needed by Kokkos.
 #ifndef KOKKOS_SETUP
 #define KOKKOS_SETUP
 
-#include <KokkosCore_config.h>
+#include <Kokkos_Macros.hpp>
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Sparse.hpp>
+#include <KokkosSparse.hpp>
 #include "Kokkos_UnorderedMap.hpp"
 #include "Geometry.hpp" // Just so we have the local_int_t and global_int_t definitions.
 
@@ -62,8 +62,8 @@ typedef const_global_int_2d_type::HostMirror host_const_global_int_2d_type;
 typedef const_char_1d_type::HostMirror host_const_char_1d_type;
 //CrsMatrix typedefs
 //CrsMatrix types
-typedef Kokkos::CrsMatrix<double, local_int_t, execution_space> local_matrix_type;
-typedef Kokkos::CrsMatrix<double, global_int_t, execution_space> global_matrix_type;
+typedef KokkosSparse::CrsMatrix<double, local_int_t, execution_space> local_matrix_type;
+typedef KokkosSparse::CrsMatrix<double, global_int_t, execution_space> global_matrix_type;
 typedef local_matrix_type::values_type values_type; // View for matrix values, similar to double_1d_type.
 typedef local_matrix_type::index_type local_index_type; // View for column Indices, similar to local_int_1d_type.
 typedef global_matrix_type::index_type global_index_type;
